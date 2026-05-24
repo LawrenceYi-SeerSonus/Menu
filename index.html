@@ -27,7 +27,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
 /* ── MOBILE INPUT ── */
 #app-input{max-width:480px;margin:0 auto;padding:0 16px 120px;position:relative}
-#app-input::before{content:'';position:fixed;top:-200px;right:-200px;width:500px;height:500px;background:radial-gradient(circle,rgba(201,169,110,.06)0%,transparent 70%);pointer-events:none;z-index:0}
+#app-input::before{content:'';position:fixed;top:-200px;right:-200px;width:500px;height:500px;background:radial-gradient(circle,rgba(201,169,110,.06)0%,rgba(201,169,110,0) 70%);pointer-events:none;z-index:0}
 
 .app-header{padding:20px 0 12px;text-align:center;position:relative;z-index:1}
 .app-header .logo-icon{width:40px;height:40px;margin:0 auto 10px;background:linear-gradient(135deg,var(--accent-gold),var(--accent-gold-light));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 16px rgba(201,169,110,.2)}
@@ -35,7 +35,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .app-header .subtitle{font-size:.75rem;color:var(--text-muted);letter-spacing:.15em;text-transform:uppercase;margin-top:4px}
 
 .section-label{font-size:.65rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-gold);margin-bottom:12px;padding-left:2px;display:flex;align-items:center;gap:8px;margin-top:20px}
-.section-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--accent-gold-dim),transparent)}
+.section-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--accent-gold-dim),rgba(201,169,110,0))}
 
 .card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:18px;margin-bottom:16px;position:relative;z-index:1}
 
@@ -183,7 +183,7 @@ select.input-field{appearance:none;-webkit-appearance:none;background-image:url(
 .a4-inner{padding:48px 56px 40px;position:relative;z-index:1}
 
 .a4-page::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;background:linear-gradient(90deg,var(--print-accent),var(--print-accent-light),var(--print-accent))}
-.a4-page::after{content:'';position:absolute;top:0;right:0;width:300px;height:300px;background:radial-gradient(circle at top right,rgba(201,169,110,.06),transparent 70%);pointer-events:none}
+.a4-page::after{content:'';position:absolute;top:0;right:0;width:300px;height:300px;background:radial-gradient(circle at top right,rgba(201,169,110,.06),rgba(201,169,110,0) 70%);pointer-events:none}
 
 /* Print header */
 .print-header{text-align:center;margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--print-border)}
@@ -196,7 +196,7 @@ select.input-field{appearance:none;-webkit-appearance:none;background-image:url(
 
 .print-section-title{display:flex;align-items:center;gap:10px;margin-bottom:14px;margin-top:24px}
 .print-section-title h2{font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;color:var(--print-text);white-space:nowrap}
-.print-section-title .section-line{flex:1;height:1px;background:linear-gradient(90deg,var(--print-border),transparent)}
+.print-section-title .section-line{flex:1;height:1px;background:linear-gradient(90deg,var(--print-border),rgba(212,197,169,0))}
 .print-section-title .section-icon{font-size:.95rem;opacity:.7}
 
 /* Food cards */
@@ -415,9 +415,15 @@ select.input-field{appearance:none;-webkit-appearance:none;background-image:url(
 
 <!-- A4 PRINT VIEW -->
 <div id="app-print">
-  <div class="print-controls">
-    <button class="btn btn-secondary" onclick="backToEdit()">← Back to Edit</button>
-    <button class="btn btn-primary" onclick="window.print()">🖨 Print / Save PDF</button>
+  <div class="print-controls" style="display:flex; flex-direction:column; gap:8px;">
+    <div style="display:flex; gap:10px; width:100%;">
+      <button class="btn btn-secondary" onclick="backToEdit()">← Back to Edit</button>
+      <button class="btn btn-primary" onclick="triggerMobilePrint()">🖨 Print / Save PDF</button>
+    </div>
+    <!-- Custom webview warning card -->
+    <div id="webview-warning-tip" style="font-size:0.72rem; color:#856404; background:#fff3cd; border: 1px solid #ffeeba; border-radius:6px; padding:10px 14px; margin-top:4px; line-height:1.45; text-align:left; display:none; font-family:sans-serif;">
+      <strong>💡 iPhone/iPad Printing Tip:</strong> You are currently inside an in-app browser which restricts PDF printing. Please tap the compass 🧭 or menu icon in the bottom-right corner to <strong>"Open in Safari / System Browser"</strong> to enable printing.
+    </div>
   </div>
   <div class="a4-page" id="a4-page"></div>
 </div>
@@ -981,7 +987,23 @@ function generatePrintView(){
   document.getElementById('app-input').style.display='none';
   document.getElementById('app-print').style.display='block';
   document.querySelector('.bottom-bar').style.display='none';
+  
+  // Check for in-app browser / webview on iOS to show warning card
+  const isWebview = /(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/i.test(navigator.userAgent);
+  if (isWebview && document.getElementById('webview-warning-tip')) {
+    document.getElementById('webview-warning-tip').style.display = 'block';
+  }
+  
   window.scrollTo(0,0);
+}
+
+function triggerMobilePrint() {
+  const isWebview = /(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/i.test(navigator.userAgent);
+  if (isWebview) {
+    alert("⚠️ Webview Printing Blocked:\n\nYou are currently inside ChatGPT's built-in browser which blocks printing.\n\n👉 Please click the compass 🧭 or menu icon in the bottom-right corner of your screen to \"Open in Safari / System Browser\". Once opened in Safari, print/save PDF will work perfectly!");
+  } else {
+    window.print();
+  }
 }
 
 function backToEdit(){
