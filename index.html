@@ -201,7 +201,7 @@ select.input-field{appearance:none;-webkit-appearance:none;background-image:url(
 
 /* Food cards */
 .food-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.food-card{background:var(--print-section-bg);border-radius:8px;padding:12px 14px;border-left:3px solid var(--print-accent-light);position:relative}
+.food-card{background:var(--print-section-bg);border-radius:8px;padding:12px 14px;border-left:3px solid var(--print-accent-light);position:relative;page-break-inside:avoid;break-inside:avoid}
 .food-card .food-number{position:absolute;top:8px;right:10px;font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:rgba(139,115,85,.07);line-height:1}
 .food-card .food-title{font-family:'Playfair Display',serif;font-size:.8rem;font-weight:600;color:var(--print-text);margin-bottom:6px;padding-right:20px}
 .food-card .food-details{display:flex;flex-wrap:wrap;gap:3px}
@@ -213,7 +213,7 @@ select.input-field{appearance:none;-webkit-appearance:none;background-image:url(
 
 /* Wine */
 .wine-section{margin-top:4px}
-.wine-category{margin-bottom:14px}
+.wine-category{margin-bottom:14px;page-break-inside:avoid;break-inside:avoid}
 .wine-category-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .wine-category-header .wine-dot{width:8px;height:8px;border-radius:50%}
 .wine-dot.white-dot{background:linear-gradient(135deg,#e6d88a,#f0e8b4);box-shadow:0 0 6px rgba(230,216,138,.3)}
@@ -222,7 +222,7 @@ select.input-field{appearance:none;-webkit-appearance:none;background-image:url(
 .wine-dot.spirit-dot{background:linear-gradient(135deg,#6a8caf,#7a9ec4);box-shadow:0 0 6px rgba(122,158,196,.3)}
 .wine-category-header h3{font-family:'Cormorant Garamond',serif;font-size:.82rem;font-weight:600;color:var(--print-text);letter-spacing:.1em;text-transform:uppercase}
 .wine-list{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.wine-item{display:flex;align-items:flex-start;gap:7px;padding:7px 10px;background:var(--print-section-bg);border-radius:5px;font-size:.66rem;color:var(--print-text);line-height:1.35}
+.wine-item{display:flex;align-items:flex-start;gap:7px;padding:7px 10px;background:var(--print-section-bg);border-radius:5px;font-size:.66rem;color:var(--print-text);line-height:1.35;page-break-inside:avoid;break-inside:avoid}
 .wine-item .wine-bullet{width:4px;height:4px;border-radius:50%;background:var(--print-accent-light);flex-shrink:0;margin-top:4px}
 .wine-item .wine-name{font-weight:500}
 
@@ -237,7 +237,8 @@ select.input-field{appearance:none;-webkit-appearance:none;background-image:url(
 .corner-decor.bottom-right{bottom:20px;right:20px;border-width:0 1px 1px 0}
 
 @media print{
-  body{background:white!important;margin:0;padding:0}
+  @page { size: A4 portrait; margin: 0 !important; }
+  body{background:white!important;margin:0!important;padding:0}
   #app-input,#app-print .print-controls,.bottom-bar,.toast{display:none!important}
   #app-print{display:block!important;background:white!important;padding:0!important}
   .a4-page{box-shadow:none!important;width:100%!important;min-height:auto!important;page-break-after:always;margin:0!important}
@@ -425,7 +426,7 @@ select.input-field{appearance:none;-webkit-appearance:none;background-image:url(
       <strong>💡 iPhone/iPad Printing Tip:</strong> You are currently inside an in-app browser which restricts PDF printing. Please tap the compass 🧭 or menu icon in the bottom-right corner to <strong>"Open in Safari / System Browser"</strong> to enable printing.
     </div>
   </div>
-  <div class="a4-page" id="a4-page"></div>
+  <div id="a4-pages-container"></div>
 </div>
 
 <script>
@@ -918,6 +919,7 @@ function saveModalItem(){
 document.getElementById('add-modal').addEventListener('click',e=>{if(e.target===document.getElementById('add-modal'))closeModal()});
 
 // ═══ GENERATE BEAUTIFUL A4 PRINT LAYOUT ═══
+// ═══ GENERATE BEAUTIFUL A4 PRINT LAYOUT ═══
 function generatePrintView(){
   if(!foodItems.length&&!wineItems.length){showToast('Add some items first!','error');return}
 
@@ -928,9 +930,13 @@ function generatePrintView(){
   const fdt=document.getElementById('flight-date').value;
   const fmtDate=fdt?new Date(fdt).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'}):new Date().toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
 
-  let foodHTML='';
+  const hasBoth = foodItems.length > 0 && wineItems.length > 0;
+  let finalHTML = '';
+
+  // --- PAGE 1: FOOD ONLY ---
   if(foodItems.length){
-    foodHTML=`
+    const pageNumLabel = hasBoth ? "Page 1 of 2" : "Page 1 of 1";
+    const foodHTML=`
       <div class="print-section-title"><span class="section-icon">🍽</span><h2>For Your Selection</h2><div class="section-line"></div></div>
       <div class="food-grid">
         ${foodItems.map((item,idx)=>`
@@ -942,47 +948,79 @@ function generatePrintView(){
           </div>
         `).join('')}
       </div>`;
-  }
 
-  let wineHTML='';
-  const cats={};
-  wineItems.forEach(w=>{if(!cats[w.category])cats[w.category]=[];cats[w.category].push(w)});
-  if(Object.keys(cats).length){
-    const order=['Champagne','White','Red','Spirit'];
-    const dotMap={Champagne:'champagne-dot',White:'white-dot',Red:'red-dot',Spirit:'spirit-dot'};
-    const labelMap={Champagne:'Champagne',White:'White Wines',Red:'Red Wines',Spirit:'Spirits & Others'};
-    let cHTML='';
-    order.forEach(cat=>{
-      if(cats[cat]){
-        cHTML+=`<div class="wine-category">
-          <div class="wine-category-header"><div class="wine-dot ${dotMap[cat]}"></div><h3>${labelMap[cat]}</h3></div>
-          <div class="wine-list">${cats[cat].map(w=>`<div class="wine-item"><div class="wine-bullet"></div><div class="wine-name">${escapeHtml(w.name)}</div></div>`).join('')}</div>
-        </div>`;
-      }
-    });
-    wineHTML=`<div class="print-section-title"><span class="section-icon">🍷</span><h2>Wine & Beverage Selection</h2><div class="section-line"></div></div><div class="wine-section">${cHTML}</div>`;
-  }
-
-  document.getElementById('a4-page').innerHTML=`
-    <div class="corner-decor top-left"></div><div class="corner-decor top-right"></div>
-    <div class="corner-decor bottom-left"></div><div class="corner-decor bottom-right"></div>
-    <div class="a4-inner">
-      <div class="print-header">
-        <div class="airline-badge"><span class="dot"></span><span>${escapeHtml(svc)}</span><span class="dot"></span></div>
-        <h1>${escapeHtml(route)}</h1>
-        <div class="flight-route">${escapeHtml(cls)}</div>
-        <div class="flight-meta">
-          ${fno?`<span>✈ ${escapeHtml(fno)}</span>`:''}
-          <span>📅 ${fmtDate}</span>
-          <span>🍽 ${foodItems.length} items · 🍷 ${wineItems.length} wines</span>
+    finalHTML += `
+      <div class="a4-page" style="margin-bottom: 20px;">
+        <div class="corner-decor top-left"></div><div class="corner-decor top-right"></div>
+        <div class="corner-decor bottom-left"></div><div class="corner-decor bottom-right"></div>
+        <div class="a4-inner">
+          <div class="print-header">
+            <div class="airline-badge"><span class="dot"></span><span>${escapeHtml(svc)}</span><span class="dot"></span></div>
+            <h1>${escapeHtml(route)}</h1>
+            <div class="flight-route">${escapeHtml(cls)}</div>
+            <div class="flight-meta">
+              ${fno?`<span>✈ ${escapeHtml(fno)}</span>`:''}
+              <span>📅 ${fmtDate}</span>
+              <span>🍽 ${foodItems.length} items</span>
+            </div>
+          </div>
+          ${foodHTML}
+          <div class="print-footer">
+            <div class="footer-note">Crew Service Reference Sheet - Food</div>
+            <div>Generated ${new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})} · ${pageNumLabel}</div>
+          </div>
         </div>
-      </div>
-      ${foodHTML}${wineHTML}
-      <div class="print-footer">
-        <div class="footer-note">Crew Service Reference Sheet</div>
-        <div>Generated ${new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})} · Flight Menu Prep</div>
-      </div>
-    </div>`;
+      </div>`;
+  }
+
+  // --- PAGE 2: WINE ONLY ---
+  if(wineItems.length){
+    const pageNumLabel = hasBoth ? "Page 2 of 2" : "Page 1 of 1";
+    let wineHTML='';
+    const cats={};
+    wineItems.forEach(w=>{if(!cats[w.category])cats[w.category]=[];cats[w.category].push(w)});
+    
+    if(Object.keys(cats).length){
+      const order=['Champagne','White','Red','Spirit'];
+      const dotMap={Champagne:'champagne-dot',White:'white-dot',Red:'red-dot',Spirit:'spirit-dot'};
+      const labelMap={Champagne:'Champagne',White:'White Wines',Red:'Red Wines',Spirit:'Spirits & Others'};
+      let cHTML='';
+      order.forEach(cat=>{
+        if(cats[cat]){
+          cHTML+=`<div class="wine-category">
+            <div class="wine-category-header"><div class="wine-dot ${dotMap[cat]}"></div><h3>${labelMap[cat]}</h3></div>
+            <div class="wine-list">${cats[cat].map(w=>`<div class="wine-item"><div class="wine-bullet"></div><div class="wine-name">${escapeHtml(w.name)}</div></div>`).join('')}</div>
+          </div>`;
+        }
+      });
+      wineHTML=`<div class="print-section-title"><span class="section-icon">🍷</span><h2>Wine & Beverage Selection</h2><div class="section-line"></div></div><div class="wine-section">${cHTML}</div>`;
+    }
+
+    finalHTML += `
+      <div class="a4-page">
+        <div class="corner-decor top-left"></div><div class="corner-decor top-right"></div>
+        <div class="corner-decor bottom-left"></div><div class="corner-decor bottom-right"></div>
+        <div class="a4-inner">
+          <div class="print-header">
+            <div class="airline-badge"><span class="dot"></span><span>${escapeHtml(svc)}</span><span class="dot"></span></div>
+            <h1>${escapeHtml(route)}</h1>
+            <div class="flight-route">${escapeHtml(cls)}</div>
+            <div class="flight-meta">
+              ${fno?`<span>✈ ${escapeHtml(fno)}</span>`:''}
+              <span>📅 ${fmtDate}</span>
+              <span>🍷 ${wineItems.length} wines</span>
+            </div>
+          </div>
+          ${wineHTML}
+          <div class="print-footer">
+            <div class="footer-note">Crew Service Reference Sheet - Wine</div>
+            <div>Generated ${new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})} · ${pageNumLabel}</div>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  document.getElementById('a4-pages-container').innerHTML = finalHTML;
 
   document.getElementById('app-input').style.display='none';
   document.getElementById('app-print').style.display='block';
