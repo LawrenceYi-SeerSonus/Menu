@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Flight Menu Prep — Cabin Crew Service Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg-primary:#0a0a0f;--bg-secondary:#12121a;--bg-card:#1a1a28;
+  --text-primary:#f0ede6;--text-secondary:#a09e98;--text-muted:#6b6964;
+  --accent-gold:#c9a96e;--accent-gold-light:#dfc089;--accent-gold-dim:rgba(201,169,110,.15);
+  --accent-rose:#c47a7a;--accent-blue:#7a9ec4;--accent-amber:#d4a843;
+  --border-subtle:rgba(255,255,255,.06);--border-medium:rgba(255,255,255,.12);
+  --glass-bg:rgba(26,26,40,.85);--glass-border:rgba(255,255,255,.08);
+  --radius-sm:8px;--radius-md:12px;--radius-lg:16px;--radius-xl:20px;
+  --print-bg:#fffef9;--print-text:#1a1a1a;--print-text-sec:#4a4a4a;
+  --print-accent:#8B7355;--print-accent-light:#c9a96e;--print-border:#d4c5a9;--print-section-bg:#f8f5ee;
+}
+
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg-primary);color:var(--text-primary);min-height:100dvh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── MOBILE INPUT ── */
+#app-input{max-width:480px;margin:0 auto;padding:0 16px 120px;position:relative}
+#app-input::before{content:'';position:fixed;top:-200px;right:-200px;width:500px;height:500px;background:radial-gradient(circle,rgba(201,169,110,.06)0%,transparent 70%);pointer-events:none;z-index:0}
+
+.app-header{padding:20px 0 12px;text-align:center;position:relative;z-index:1}
+.app-header .logo-icon{width:40px;height:40px;margin:0 auto 10px;background:linear-gradient(135deg,var(--accent-gold),var(--accent-gold-light));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 16px rgba(201,169,110,.2)}
+.app-header h1{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:600;background:linear-gradient(135deg,var(--text-primary),var(--accent-gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.app-header .subtitle{font-size:.75rem;color:var(--text-muted);letter-spacing:.15em;text-transform:uppercase;margin-top:4px}
+
+.section-label{font-size:.65rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-gold);margin-bottom:12px;padding-left:2px;display:flex;align-items:center;gap:8px;margin-top:20px}
+.section-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--accent-gold-dim),transparent)}
+
+.card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:18px;margin-bottom:16px;position:relative;z-index:1}
+
+.input-group{margin-bottom:14px}
+.input-group:last-child{margin-bottom:0}
+.input-label{font-size:.72rem;font-weight:500;color:var(--text-secondary);margin-bottom:6px;display:block;letter-spacing:.03em}
+.input-field{width:100%;background:var(--bg-primary);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);padding:12px 14px;font-size:.95rem;color:var(--text-primary);font-family:'Inter',sans-serif;transition:all .2s;outline:none}
+.input-field:focus{border-color:var(--accent-gold);box-shadow:0 0 0 3px var(--accent-gold-dim)}
+.input-field::placeholder{color:var(--text-muted)}
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+select.input-field{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a09e98' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+
+/* Swipable Carousel for Photo Reference */
+.photo-carousel {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 8px 2px 12px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+.photo-carousel::-webkit-scrollbar {
+  height: 4px;
+}
+.photo-carousel::-webkit-scrollbar-thumb {
+  background: var(--accent-gold-dim);
+  border-radius: 2px;
+}
+.photo-slide {
+  flex: 0 0 90px;
+  height: 90px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-medium);
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  scroll-snap-align: start;
+}
+.photo-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.photo-slide .remove-photo-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(0,0,0,0.7);
+  border: none;
+  color: #fff;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-size: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Lightbox Overlay */
+#photo-lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 300;
+  justify-content: center;
+  align-items: center;
+}
+#photo-lightbox img {
+  max-width: 92%;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  animation: zoomIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes zoomIn {
+  from { transform: scale(0.93); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Parsed items */
+.parsed-item{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:14px;margin-bottom:8px;position:relative}
+.parsed-item .item-title{font-size:.9rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;padding-right:28px}
+.parsed-item .item-details{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.detail-chip{display:inline-block;font-size:.66rem;font-weight:500;padding:3px 8px;border-radius:4px;background:rgba(201,169,110,.1);color:var(--accent-gold-light);letter-spacing:.02em}
+.parsed-item .item-options{margin-top:8px;font-size:.72rem;color:var(--accent-gold);font-weight:500;padding:6px 10px;background:rgba(201,169,110,.08);border-radius:6px;border-left:3px solid var(--accent-gold)}
+.parsed-item .remove-item-btn{position:absolute;top:10px;right:10px;background:none;border:none;color:var(--text-muted);font-size:16px;cursor:pointer;padding:4px}
+.parsed-item .remove-item-btn:hover{color:var(--accent-rose)}
+
+.wine-tag{display:inline-block;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:4px;margin-bottom:6px}
+.wine-tag.white{background:rgba(255,223,120,.12);color:#e6c84a}
+.wine-tag.red{background:rgba(196,122,122,.15);color:var(--accent-rose)}
+.wine-tag.champagne{background:rgba(212,168,67,.15);color:var(--accent-amber)}
+.wine-tag.spirit{background:rgba(122,158,196,.15);color:var(--accent-blue)}
+
+.add-item-btn{width:100%;padding:12px;background:transparent;border:1px dashed var(--border-medium);border-radius:var(--radius-md);color:var(--text-muted);font-size:.82rem;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif;margin-bottom:8px}
+.add-item-btn:hover{border-color:var(--accent-gold);color:var(--accent-gold);background:var(--accent-gold-dim)}
+
+.status-strip{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.status-badge{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;padding:4px 10px;border-radius:20px;font-weight:500}
+.status-badge.food-count{background:rgba(201,169,110,.12);color:var(--accent-gold)}
+.status-badge.wine-count{background:rgba(196,122,122,.12);color:var(--accent-rose)}
+
+.empty-state{text-align:center;padding:30px 20px;color:var(--text-muted)}
+.empty-state .empty-icon{font-size:2rem;margin-bottom:8px;opacity:.5}
+.empty-state p{font-size:.82rem;line-height:1.5}
+
+/* Bottom bar */
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:var(--glass-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--glass-border);padding:12px 16px;padding-bottom:max(12px,env(safe-area-inset-bottom));z-index:100;display:flex;gap:10px}
+
+.btn{flex:1;padding:14px 20px;border:none;border-radius:var(--radius-md);font-family:'Inter',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-primary{background:linear-gradient(135deg,var(--accent-gold),var(--accent-gold-light));color:#1a1a1a;box-shadow:0 4px 16px rgba(201,169,110,.3)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(201,169,110,.4)}
+.btn-primary:active{transform:translateY(0)}
+.btn-secondary{background:var(--bg-card);color:var(--text-secondary);border:1px solid var(--border-subtle)}
+.btn-secondary:hover{border-color:var(--border-medium);color:var(--text-primary)}
+
+/* Modal Overlay */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:200;display:none;align-items:flex-end;justify-content:center}
+.modal-overlay.active{display:flex}
+.modal-sheet{width:100%;max-width:480px;background:var(--bg-secondary);border-radius:var(--radius-xl) var(--radius-xl) 0 0;padding:20px 16px;padding-bottom:max(20px,env(safe-area-inset-bottom));max-height:85vh;overflow-y:auto;animation:slideUp .3s ease}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-handle{width:36px;height:4px;background:var(--border-medium);border-radius:2px;margin:0 auto 16px}
+.modal-title{font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:16px;text-align:center}
+
+/* Toast */
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-120%);background:var(--bg-card);border:1px solid var(--border-medium);border-radius:var(--radius-md);padding:12px 20px;font-size:.82rem;color:var(--text-primary);z-index:300;transition:transform .3s ease;box-shadow:0 4px 24px rgba(0,0,0,.3);max-width:90vw;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.success{border-color:rgba(100,200,100,.3)}
+.toast.error{border-color:rgba(200,100,100,.3)}
+
+/* ── A4 PRINT VIEW ── */
+#app-print{display:none;background:#e8e4dd;min-height:100vh;padding:20px}
+#app-print .print-controls{max-width:794px;margin:0 auto 20px;display:flex;gap:10px;flex-wrap:wrap}
+#app-print .print-controls .btn{flex:none;padding:10px 20px}
+
+.a4-page{width:794px;min-height:1123px;background:var(--print-bg);margin:0 auto;box-shadow:0 4px 40px rgba(0,0,0,.2);position:relative;overflow:hidden}
+.a4-inner{padding:48px 56px 40px;position:relative;z-index:1}
+
+.a4-page::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;background:linear-gradient(90deg,var(--print-accent),var(--print-accent-light),var(--print-accent))}
+.a4-page::after{content:'';position:absolute;top:0;right:0;width:300px;height:300px;background:radial-gradient(circle at top right,rgba(201,169,110,.06),transparent 70%);pointer-events:none}
+
+/* Print header */
+.print-header{text-align:center;margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--print-border)}
+.print-header .airline-badge{display:inline-flex;align-items:center;gap:8px;font-size:.6rem;font-weight:600;letter-spacing:.25em;text-transform:uppercase;color:var(--print-accent);margin-bottom:6px}
+.print-header .airline-badge .dot{width:4px;height:4px;background:var(--print-accent-light);border-radius:50%}
+.print-header h1{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--print-text);letter-spacing:.03em;margin-bottom:4px}
+.print-header .flight-route{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--print-accent);font-weight:500;letter-spacing:.08em}
+.print-header .flight-meta{display:flex;justify-content:center;gap:20px;margin-top:10px;font-size:.65rem;color:var(--print-text-sec);letter-spacing:.04em}
+.print-header .flight-meta span{display:flex;align-items:center;gap:4px}
+
+.print-section-title{display:flex;align-items:center;gap:10px;margin-bottom:14px;margin-top:24px}
+.print-section-title h2{font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;color:var(--print-text);white-space:nowrap}
+.print-section-title .section-line{flex:1;height:1px;background:linear-gradient(90deg,var(--print-border),transparent)}
+.print-section-title .section-icon{font-size:.95rem;opacity:.7}
+
+/* Food cards */
+.food-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.food-card{background:var(--print-section-bg);border-radius:8px;padding:12px 14px;border-left:3px solid var(--print-accent-light);position:relative}
+.food-card .food-number{position:absolute;top:8px;right:10px;font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:rgba(139,115,85,.07);line-height:1}
+.food-card .food-title{font-family:'Playfair Display',serif;font-size:.8rem;font-weight:600;color:var(--print-text);margin-bottom:6px;padding-right:20px}
+.food-card .food-details{display:flex;flex-wrap:wrap;gap:3px}
+.food-card .food-detail-chip{display:inline-block;font-size:.58rem;font-weight:500;padding:2px 7px;border-radius:3px;background:rgba(139,115,85,.08);color:var(--print-accent);letter-spacing:.02em}
+.food-card .food-options{margin-top:8px;padding:5px 8px;background:rgba(139,115,85,.06);border-radius:4px;border-left:2px solid var(--print-accent-light)}
+.food-card .food-options .opt-label{font-size:.5rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--print-accent);opacity:.7;display:block;margin-bottom:1px}
+.food-card .food-options .opt-value{font-size:.62rem;font-weight:600;color:var(--print-accent)}
+.food-card.full-width{grid-column:1/-1}
+
+/* Wine */
+.wine-section{margin-top:4px}
+.wine-category{margin-bottom:14px}
+.wine-category-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.wine-category-header .wine-dot{width:8px;height:8px;border-radius:50%}
+.wine-dot.white-dot{background:linear-gradient(135deg,#e6d88a,#f0e8b4);box-shadow:0 0 6px rgba(230,216,138,.3)}
+.wine-dot.red-dot{background:linear-gradient(135deg,#8B3A3A,#c47a7a);box-shadow:0 0 6px rgba(196,122,122,.3)}
+.wine-dot.champagne-dot{background:linear-gradient(135deg,#c9a96e,#e6c84a);box-shadow:0 0 6px rgba(201,169,110,.3)}
+.wine-dot.spirit-dot{background:linear-gradient(135deg,#6a8caf,#7a9ec4);box-shadow:0 0 6px rgba(122,158,196,.3)}
+.wine-category-header h3{font-family:'Cormorant Garamond',serif;font-size:.82rem;font-weight:600;color:var(--print-text);letter-spacing:.1em;text-transform:uppercase}
+.wine-list{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.wine-item{display:flex;align-items:flex-start;gap:7px;padding:7px 10px;background:var(--print-section-bg);border-radius:5px;font-size:.66rem;color:var(--print-text);line-height:1.35}
+.wine-item .wine-bullet{width:4px;height:4px;border-radius:50%;background:var(--print-accent-light);flex-shrink:0;margin-top:4px}
+.wine-item .wine-name{font-weight:500}
+
+/* Footer */
+.print-footer{margin-top:28px;padding-top:14px;border-top:1px solid var(--print-border);display:flex;justify-content:space-between;align-items:center;font-size:.55rem;color:rgba(74,74,74,.5)}
+.print-footer .footer-note{font-style:italic}
+
+.corner-decor{position:absolute;width:36px;height:36px;border-color:rgba(201,169,110,.12);border-style:solid}
+.corner-decor.top-left{top:20px;left:20px;border-width:1px 0 0 1px}
+.corner-decor.top-right{top:20px;right:20px;border-width:1px 1px 0 0}
+.corner-decor.bottom-left{bottom:20px;left:20px;border-width:0 0 1px 1px}
+.corner-decor.bottom-right{bottom:20px;right:20px;border-width:0 1px 1px 0}
+
+@media print{
+  body{background:white!important;margin:0;padding:0}
+  #app-input,#app-print .print-controls,.bottom-bar,.toast{display:none!important}
+  #app-print{display:block!important;background:white!important;padding:0!important}
+  .a4-page{box-shadow:none!important;width:100%!important;min-height:auto!important;page-break-after:always;margin:0!important}
+  .a4-page::before,.food-card,.food-card .food-detail-chip,.food-card .food-options,.wine-item,.wine-dot{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+}
+@media(max-width:480px){
+  #app-print{padding:10px}
+  .a4-page{width:100%;min-height:auto;border-radius:var(--radius-lg)}
+  .a4-inner{padding:28px 20px}
+  .food-grid{grid-template-columns:1fr}
+  .wine-list{grid-template-columns:1fr}
+  .print-header h1{font-size:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<div id="toast" class="toast"></div>
+
+<!-- MOBILE INPUT VIEW -->
+<div id="app-input">
+  <header class="app-header">
+    <div class="logo-icon">✈</div>
+    <h1>Flight Menu Prep</h1>
+    <div class="subtitle">Cabin Crew Service Sheet</div>
+  </header>
+
+  <div class="section-label">Flight Information</div>
+  <div class="card">
+    <div class="input-group">
+      <label class="input-label" for="flight-route">Route</label>
+      <input type="text" id="flight-route" class="input-field" placeholder="e.g. SIN – MEL" value="SIN – MEL">
+    </div>
+    <div class="input-row">
+      <div class="input-group">
+        <label class="input-label" for="flight-class">Class</label>
+        <select id="flight-class" class="input-field">
+          <option value="Suites / First Class" selected>Suites / First Class</option>
+          <option value="Business Class">Business Class</option>
+          <option value="Premium Economy">Premium Economy</option>
+          <option value="Economy">Economy</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label class="input-label" for="flight-service">Service Type</label>
+        <select id="flight-service" class="input-field">
+          <option value="Sleeper Service" selected>Sleeper Service</option>
+          <option value="Main Service">Main Service</option>
+          <option value="Light Service">Light Service</option>
+          <option value="Refreshment">Refreshment</option>
+        </select>
+      </div>
+    </div>
+    <div class="input-row" style="margin-top:14px">
+      <div class="input-group">
+        <label class="input-label" for="flight-number">Flight No.</label>
+        <input type="text" id="flight-number" class="input-field" placeholder="e.g. SQ237">
+      </div>
+      <div class="input-group">
+        <label class="input-label" for="flight-date">Date</label>
+        <input type="date" id="flight-date" class="input-field">
+      </div>
+    </div>
+  </div>
+
+  <!-- NATIVE IPHONE PHOTO UPLOADER & SMART TEXT AUTO-FILL -->
+  <div class="section-label">📸 Menu Photos &amp; Smart Auto-Fill</div>
+  <div class="card" style="border-color: var(--accent-gold-dim); background: linear-gradient(180deg, var(--bg-card) 0%, rgba(26,26,40,0.4) 100%);">
+    
+    <!-- Visual Photo Reference Viewer -->
+    <div style="margin-bottom: 16px;">
+      <h3 style="font-family:'Playfair Display', serif; font-size:1.05rem; color:var(--accent-gold-light); margin-bottom:4px; display:flex; align-items:center; gap:6px;">
+        <span>📸</span> Menu Reference Photos
+      </h3>
+      <p style="font-size:0.75rem; color:var(--text-secondary); line-height:1.4; margin-bottom:10px;">
+        Take or select photos of your paper flight menu. They will appear below as a swipable reference gallery that you can tap to zoom and read directly on-screen.
+      </p>
+      
+      <!-- Native camera file select -->
+      <label class="btn btn-secondary" style="display:inline-flex; width:auto; padding:8px 16px; font-size:0.78rem; cursor:pointer; margin-bottom:8px;">
+        Upload / Take Photos
+        <input type="file" id="menu-photos-input" accept="image/*" multiple style="display:none;" onchange="handleFileSelection(this)">
+      </label>
+      
+      <!-- Photo Carousel List -->
+      <div id="photo-carousel-container" style="display:none; margin-top: 8px;">
+        <div class="photo-carousel" id="photo-carousel-list"></div>
+      </div>
+    </div>
+    
+    <!-- Smart Live Text Auto-Fill -->
+    <div style="border-top: 1px dashed var(--border-subtle); padding-top: 14px;">
+      <h3 style="font-family:'Playfair Display', serif; font-size:1.05rem; color:var(--accent-gold-light); margin-bottom:4px; display:flex; align-items:center; gap:6px;">
+        <span>📋</span> Smart Text Auto-Fill
+      </h3>
+      <p style="font-size:0.75rem; color:var(--text-secondary); line-height:1.4; margin-bottom:10px;">
+        To avoid typos, press and hold to select text on your photos natively (using your iPhone's **Live Text** feature), and paste it below.
+      </p>
+      
+      <textarea id="menu-paste-box" class="input-field" style="width:100%; height:120px; font-size:0.8rem; line-height:1.45; resize:none; background:var(--bg-primary); border-color:var(--border-subtle); margin-bottom:10px;" placeholder="Paste menu text here (e.g. Osetra Caviar, Wanton Mee, Champagnes, red wines...)"></textarea>
+      
+      <button class="btn btn-primary" style="background: linear-gradient(135deg, var(--accent-amber), var(--accent-gold)); color: #111; padding: 10px 16px; font-size:0.8rem; width: auto; flex: none;" onclick="runSmartTextFill()">
+        🪄 Smart Auto-Fill
+      </button>
+    </div>
+  </div>
+
+  <div id="parsed-content">
+    <div class="status-strip" id="status-strip" style="display:none">
+      <span class="status-badge food-count" id="food-count-badge">🍽 0 Food Items</span>
+      <span class="status-badge wine-count" id="wine-count-badge">🍷 0 Wine Selections</span>
+    </div>
+
+    <div class="section-label">🍽 Food Items</div>
+    <div id="food-items-list"></div>
+    <button class="add-item-btn" onclick="openAddModal('food')">+ Add Food Item manually</button>
+
+    <div class="section-label">🍷 Wine &amp; Beverages</div>
+    <div id="wine-items-list"></div>
+    <button class="add-item-btn" onclick="openAddModal('wine')">+ Add Wine / Beverage manually</button>
+  </div>
+
+  <div class="bottom-bar">
+    <button class="btn btn-secondary" onclick="clearAll()">🗑 Clear All</button>
+    <button class="btn btn-primary" onclick="generatePrintView()">✨ Generate A4 Sheet</button>
+  </div>
+</div>
+
+<!-- NATIVE HIGH-RES CAROUSEL IMAGE LIGHTBOX -->
+<div id="photo-lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="Expanded menu photo">
+  <div style="position:absolute; top:20px; right:20px; font-size:1.6rem; color:#fff; cursor:pointer; font-weight:300; background:rgba(0,0,0,0.5); width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; border: 1px solid rgba(255,255,255,0.2);">✕</div>
+</div>
+
+<!-- MANUAL ADD ITEM MODAL -->
+<div class="modal-overlay" id="add-modal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <h2 class="modal-title" id="modal-title">Add Food Item</h2>
+    <div id="modal-food-fields">
+      <div class="input-group">
+        <label class="input-label">Item Name *</label>
+        <input type="text" id="modal-food-name" class="input-field" placeholder="e.g. Wanton Mee">
+      </div>
+      <div class="input-group">
+        <label class="input-label">Key Details (comma-separated)</label>
+        <input type="text" id="modal-food-details" class="input-field" placeholder="e.g. Pork broth, Prawn-pork dumplings, Leafy greens">
+      </div>
+      <div class="input-group">
+        <label class="input-label">Options (only if guest can choose)</label>
+        <input type="text" id="modal-food-options" class="input-field" placeholder="e.g. Bacon or Chicken Chipolata">
+      </div>
+    </div>
+    <div id="modal-wine-fields" style="display:none">
+      <div class="input-group">
+        <label class="input-label">Wine / Beverage Name *</label>
+        <input type="text" id="modal-wine-name" class="input-field" placeholder="e.g. 2021 Pinot Noir, Australia">
+      </div>
+      <div class="input-group">
+        <label class="input-label">Category</label>
+        <select id="modal-wine-category" class="input-field">
+          <option value="Champagne">Champagne</option>
+          <option value="White">White</option>
+          <option value="Red">Red</option>
+          <option value="Spirit">Spirit / Other</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveModalItem()">Add Item</button>
+    </div>
+  </div>
+</div>
+
+<!-- A4 PRINT VIEW -->
+<div id="app-print">
+  <div class="print-controls">
+    <button class="btn btn-secondary" onclick="backToEdit()">← Back to Edit</button>
+    <button class="btn btn-primary" onclick="window.print()">🖨 Print / Save PDF</button>
+  </div>
+  <div class="a4-page" id="a4-page"></div>
+</div>
+
+<script>
+// ═══ DATA (Pre-populated from Singapore Airlines menu for quick demo) ═══
+let foodItems = [
+  {
+    title: 'Osetra Caviar',
+    details: ['Chilled', 'Classic condiments', 'Warm blinis', 'Russian sturgeon'],
+    options: ''
+  },
+  {
+    title: 'Fresh Eggs',
+    details: ['Baked / Scrambled / Hard-boiled', 'Green asparagus', 'Cherry tomato'],
+    options: 'Bacon or Chicken Chipolata'
+  },
+  {
+    title: 'Wanton Mee',
+    details: ['Pork broth', 'Bamboo noodles', 'Prawn-pork dumplings', 'Leafy greens'],
+    options: ''
+  },
+  {
+    title: 'Selection of Dim Sum',
+    details: ['Radish cake w/ pork', 'Pork dumpling', 'Scallop dumpling', 'Chive-chicken'],
+    options: ''
+  },
+  {
+    title: 'Seared Hokkaido Scallops & King Prawns',
+    details: ['Orzo w/ truffle', 'Pickled celtuce', 'Cherry tomato confit', 'Basil oil'],
+    options: ''
+  },
+  {
+    title: 'Continental Breakfast',
+    details: ['Assorted bread', 'Preserves'],
+    options: ''
+  },
+  {
+    title: 'Fruit',
+    details: ['Sliced fresh fruits'],
+    options: ''
+  }
+];
+
+let wineItems = [
+  { name: '2015 Louis Roederer Cristal Millesime Brut, Champagne, France', category: 'Champagne' },
+  { name: '2016 Pol Roger Blanc de Blancs Brut, Champagne, France', category: 'Champagne' },
+  { name: '2023 Home Block Martinborough Vineyard Sauvignon Blanc, New Zealand', category: 'White' },
+  { name: '2021 Giant Steps Sexton Vineyard Chardonnay, Yarra Valley, Australia', category: 'White' },
+  { name: '2021 Giant Steps Fatal Shore Pinot Noir, Australia', category: 'Red' },
+  { name: '2008 Château Léoville-Poyferré, Saint-Julien, Bordeaux, France', category: 'Red' },
+  { name: "2021 Clonakilla O'Riada Shiraz", category: 'Red' }
+];
+
+let uploadedPhotos = [];
+let currentModalType = 'food';
+
+// ═══ UTILS ═══
+function escapeHtml(t){
+  if(!t) return '';
+  const d=document.createElement('div');d.textContent=t;return d.innerHTML;
+}
+function showToast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast show '+type;
+  setTimeout(()=>{t.className='toast'},3000);
+}
+
+// ═══ REFERENCE PHOTOS CAROUSEL ENGINE ═══
+function handleFileSelection(input) {
+  const files = Array.from(input.files);
+  if (!files.length) return;
+  
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const src = e.target.result;
+      uploadedPhotos.push({ src: src, name: file.name });
+      renderPhotos();
+    };
+    reader.readAsDataURL(file);
+  });
+  
+  showToast(`Added ${files.length} menu photo(s) as visual reference`, 'success');
+}
+
+function renderPhotos() {
+  const container = document.getElementById('photo-carousel-container');
+  const list = document.getElementById('photo-carousel-list');
+  
+  if (uploadedPhotos.length === 0) {
+    container.style.display = 'none';
+    return;
+  }
+  
+  container.style.display = 'block';
+  list.innerHTML = uploadedPhotos.map((photo, idx) => `
+    <div class="photo-slide">
+      <button class="remove-photo-btn" onclick="removePhoto(${idx}, event)">✕</button>
+      <img src="${photo.src}" onclick="openLightbox('${photo.src}')" alt="${escapeHtml(photo.name)}">
+    </div>
+  `).join('');
+}
+
+function removePhoto(idx, event) {
+  event.stopPropagation();
+  uploadedPhotos.splice(idx, 1);
+  renderPhotos();
+  showToast('Photo removed', 'success');
+}
+
+function openLightbox(src) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('photo-lightbox').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  document.getElementById('photo-lightbox').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+// ═══ SMART TEXT PARSER & AUTOFILL ═══
+// ═══ SMART TEXT PARSER & AUTOFILL ═══
+function runSmartTextFill() {
+  const text = document.getElementById('menu-paste-box').value.trim();
+  if (!text) {
+    showToast('Please paste copied menu text first!', 'error');
+    return;
+  }
+  
+  // Auto-detect format: AI Markdown vs Raw Text
+  const isAiMarkdown = text.includes('### FOOD') || text.includes('### WINE') || text.includes('### ROUTE') || text.includes('### FLIGHT') || text.includes('### SERVICE');
+  
+  if (isAiMarkdown) {
+    const lines = text.split('\n');
+    let currentSection = '';
+    let foodCount = 0;
+    let wineCount = 0;
+    let currentFoodItem = null;
+    
+    lines.forEach(line => {
+      const trimmed = line.trim();
+      if (trimmed.length === 0) return;
+      
+      // Headers
+      if (trimmed.startsWith('###')) {
+        currentSection = trimmed.replace('###', '').trim().toUpperCase();
+        return;
+      }
+      
+      if (currentSection === 'ROUTE') {
+        document.getElementById('flight-route').value = trimmed;
+        return;
+      }
+      if (currentSection === 'FLIGHT') {
+        document.getElementById('flight-number').value = trimmed;
+        return;
+      }
+      if (currentSection === 'CLASS') {
+        document.getElementById('flight-class').value = trimmed;
+        return;
+      }
+      if (currentSection === 'SERVICE') {
+        document.getElementById('flight-service').value = trimmed;
+        return;
+      }
+      
+      if (currentSection === 'FOOD') {
+        if (line.trim().startsWith('* ')) {
+          if (currentFoodItem) {
+            foodItems.push(currentFoodItem);
+            foodCount++;
+          }
+          currentFoodItem = {
+            title: line.trim().replace(/^\*\s+/, ''),
+            details: [],
+            options: ''
+          };
+        } else if (line.trim().startsWith('- ') && currentFoodItem) {
+          const detailStr = line.trim().replace(/^-\s+/, '');
+          const chips = detailStr.split(',').map(c => c.trim()).filter(c => c.length > 0);
+          currentFoodItem.details.push(...chips);
+        } else if (line.includes('[OPTIONS]') && currentFoodItem) {
+          currentFoodItem.options = line.replace('[OPTIONS]', '').trim();
+        }
+        return;
+      }
+      
+      if (currentSection === 'WINE') {
+        if (line.trim().startsWith('* ')) {
+          const wineContent = line.trim().replace(/^\*\s+/, '');
+          const colonIdx = wineContent.indexOf(':');
+          let category = 'Red';
+          let name = wineContent;
+          if (colonIdx !== -1) {
+            category = wineContent.substring(0, colonIdx).trim();
+            name = wineContent.substring(colonIdx + 1).trim();
+          }
+          // Normalize category
+          if (/champ/i.test(category)) category = 'Champagne';
+          else if (/white/i.test(category)) category = 'White';
+          else if (/red/i.test(category)) category = 'Red';
+          else category = 'Spirit';
+          
+          wineItems.push({ name, category });
+          wineCount++;
+        }
+        return;
+      }
+    });
+    
+    // Push final food item
+    if (currentFoodItem) {
+      foodItems.push(currentFoodItem);
+      foodCount++;
+    }
+    
+    renderFoodItems();
+    renderWineItems();
+    updateBadges();
+    
+    // Wipe paste box
+    document.getElementById('menu-paste-box').value = '';
+    showToast(`AI Markdown Imported! ${foodCount} dishes, ${wineCount} wines loaded ✓`, 'success');
+    
+  } else {
+    // Standard raw text fallback
+    const parsed = smartParseText(text);
+    if (!parsed.length) {
+      showToast('No recognizable items found. Ensure lines contain clear dish names.', 'error');
+      return;
+    }
+    
+    let foodCount = 0;
+    let wineCount = 0;
+    
+    parsed.forEach(item => {
+      if (item.category === 'Food') {
+        foodItems.push({
+          title: item.title,
+          details: item.details || [],
+          options: item.options || ''
+        });
+        foodCount++;
+      } else {
+        wineItems.push({
+          name: item.title,
+          category: item.category
+        });
+        wineCount++;
+      }
+    });
+    
+    renderFoodItems();
+    renderWineItems();
+    updateBadges();
+    
+    document.getElementById('menu-paste-box').value = '';
+    showToast(`Auto-filled ${foodCount} food items and ${wineCount} wines! ✨`, 'success');
+  }
+}
+
+// Helper to strip OCR noise / random artifacts from strings
+function cleanTextNoise(str) {
+  if (!str) return '';
+  return str
+    .trim()
+    .replace(/^[^A-Za-z0-9\(]+|[^A-Za-z0-9\)]+$/g, '')
+    .replace(/%\s*of\s*\d*/gi, '')
+    .replace(/%\s*[a-zA-Z]*/g, '')
+    .replace(/\s+[,.:;]\s*$/g, '')
+    .replace(/\s+[b-zB-Z0-9]\s*$/g, '')
+    .trim();
+}
+
+function smartParseText(rawText) {
+  if (!rawText) return [];
+  
+  const parsedItems = [];
+  const skipKeywords = [
+    'singapore airlines', 'suites', 'first class', 'business class', 'menu', 'refreshment', 'sleeper service', 
+    'dinner', 'lunch', 'breakfast', 'beverage list', 'wine list', 'page ', 'flight', 'sq '
+  ];
+  
+  const wineKeywords = [
+    'champagne', 'blanc de blancs', 'brut', 'millesime', 'cristal', 'krug', 'dom perignon', 'pol roger',
+    'chateau', 'leoville', 'poyferre', 'vineyard', 'sauvignon', 'chardonnay', 'shiraz', 'pinot', 'cabernet',
+    'merlot', 'riesling', 'bordeaux', 'clonakilla', 'roederer', 'malbec', 'syrah', 'whisky', 'whiskey', 'cognac',
+    'vodka', 'gin', 'rum', 'liqueur', 'taylor\'s', 'port wine', 'sake'
+  ];
+  
+  const rawLines = rawText.split('\n');
+  const cleanLines = [];
+  
+  rawLines.forEach(line => {
+    const trimmed = line.trim();
+    if (trimmed.length === 0) return;
+    
+    const lower = trimmed.toLowerCase();
+    if (skipKeywords.some(kw => lower.includes(kw))) return;
+    
+    cleanLines.push(trimmed);
+  });
+  
+  const filteredText = cleanLines.join('\n');
+  
+  // Block segmentation
+  let blocks = [];
+  if (filteredText.includes('\n\n')) {
+    blocks = filteredText.split(/\n\s*\n+/);
+  } else {
+    let currentBlock = [];
+    cleanLines.forEach(line => {
+      const isNewTitle = /^[A-Z]/.test(line) && line.split(' ').length <= 5 && !line.toLowerCase().includes('served') && !line.toLowerCase().includes('with');
+      if (isNewTitle && currentBlock.length > 0) {
+        blocks.push(currentBlock.join('\n'));
+        currentBlock = [line];
+      } else {
+        currentBlock.push(line);
+      }
+    });
+    if (currentBlock.length > 0) {
+      blocks.push(currentBlock.join('\n'));
+    }
+  }
+  
+  // Parse blocks
+  blocks.forEach(block => {
+    const blockLines = block.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    if (blockLines.length === 0) return;
+    
+    blockLines.forEach((line, lineIdx) => {
+      const cleanedLine = cleanTextNoise(line);
+      if (cleanedLine.length < 3) return;
+      
+      const lowerLine = cleanedLine.toLowerCase();
+      const isWine = wineKeywords.some(kw => lowerLine.includes(kw)) || 
+                     (/\b(20\d{2}|19\d{2})\b/.test(cleanedLine) && cleanedLine.length > 12);
+                     
+      if (isWine) {
+        let category = 'Red';
+        if (/champagne|cristal|krug|roger|dom perignon|brut/i.test(lowerLine)) {
+          category = 'Champagne';
+        } else if (/chardonnay|sauvignon|riesling|white|semillon|chablis/i.test(lowerLine)) {
+          category = 'White';
+        } else if (/pinot|shiraz|cabernet|merlot|bordeaux|chateau|leoville|clonakilla|red/i.test(lowerLine)) {
+          category = 'Red';
+        } else if (/whisky|whiskey|cognac|vodka|gin|rum|liqueur|port|sake|spirit/i.test(lowerLine)) {
+          category = 'Spirit';
+        }
+        
+        parsedItems.push({
+          category: category,
+          title: cleanedLine,
+          details: [],
+          options: ''
+        });
+      } 
+      else if (lineIdx === 0) {
+        const title = cleanedLine;
+        
+        const descLines = blockLines.slice(1).map(dl => cleanTextNoise(dl)).filter(dl => {
+          return dl.length > 2 && !wineKeywords.some(kw => dl.toLowerCase().includes(kw));
+        });
+        
+        const description = descLines.join(' ');
+        let options = '';
+        let details = [];
+        
+        if (description) {
+          // Extract options
+          const optionMatch = description.match(/(?:choice of|selection of|with your choice of|or)\s+([A-Za-z\s\-]+(?:\bor\b|\b\/)[A-Za-z\s\-]+)/i);
+          if (optionMatch) {
+            options = optionMatch[1].trim();
+            options = options.split(' ').map(w => w.toLowerCase() === 'or' ? 'or' : w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+          } else {
+            const orMatch = description.match(/([A-Za-z\s]+)\s+or\s+([A-Za-z\s]+)/i);
+            if (orMatch && !description.includes('served with') && !description.includes('accompanied by')) {
+              const optionCandidate = orMatch[0].trim();
+              if (optionCandidate.split(' ').length < 8) {
+                options = optionCandidate.split(' ').map(w => w.toLowerCase() === 'or' ? 'or' : w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+              }
+            }
+          }
+          
+          let cleanDesc = description;
+          if (options) {
+            cleanDesc = description.replace(new RegExp(options, 'i'), '');
+          }
+          
+          // Split ingredients chips
+          const splitRegex = /,|\.|\b(?:served with|accompanied by|with|in a|in|and|on a bed of|w\/)\b/gi;
+          const rawChips = cleanDesc.split(splitRegex);
+          
+          rawChips.forEach(chip => {
+            let cleaned = chip.trim()
+              .replace(/^(?:a|an|the|fresh|chilled|rich|classic|assorted|selection of|prepared|served)\s+/i, '')
+              .trim();
+            
+            cleaned = cleanTextNoise(cleaned);
+            
+            if (cleaned.length > 2 && cleaned.split(' ').length <= 5) {
+              cleaned = cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
+              if (!details.includes(cleaned) && !cleaned.toLowerCase().includes('choice of')) {
+                details.push(cleaned);
+              }
+            }
+          });
+        }
+        
+        parsedItems.push({
+          category: 'Food',
+          title: title,
+          details: details,
+          options: options
+        });
+      }
+    });
+  });
+  
+  return parsedItems;
+}
+
+// ═══ RENDER MAIN ENGINE ═══
+function renderFoodItems(){
+  const c=document.getElementById('food-items-list');
+  if(!foodItems.length){c.innerHTML='<div class="empty-state"><div class="empty-icon">🍽</div><p>No food items yet. Paste text above or add manually.</p></div>';return}
+  c.innerHTML=foodItems.map((item,idx)=>`
+    <div class="parsed-item">
+      <button class="remove-item-btn" onclick="removeFood(${idx})">✕</button>
+      <div class="item-title">${escapeHtml(item.title)}</div>
+      ${item.details&&item.details.length?`<div class="item-details">${item.details.map(d=>`<span class="detail-chip">${escapeHtml(d)}</span>`).join('')}</div>`:''}
+      ${item.options?`<div class="item-options">⚙ <strong>OPTIONS:</strong> ${escapeHtml(item.options)}</div>`:''}
+    </div>
+  `).join('');
+}
+
+function renderWineItems(){
+  const c=document.getElementById('wine-items-list');
+  if(!wineItems.length){c.innerHTML='<div class="empty-state"><div class="empty-icon">🍷</div><p>No wine selections yet. Paste text above or add manually.</p></div>';return}
+  c.innerHTML=wineItems.map((item,idx)=>{
+    const tc=item.category.toLowerCase().replace(/\s.*/,'');
+    return`<div class="parsed-item">
+      <button class="remove-item-btn" onclick="removeWine(${idx})">✕</button>
+      <span class="wine-tag ${tc}">${escapeHtml(item.category)}</span>
+      <div class="item-title" style="font-size:.82rem">${escapeHtml(item.name)}</div>
+    </div>`;
+  }).join('');
+}
+
+function updateBadges(){
+  const s=document.getElementById('status-strip');
+  s.style.display=(foodItems.length||wineItems.length)?'flex':'none';
+  document.getElementById('food-count-badge').textContent=`🍽 ${foodItems.length} Food Item${foodItems.length!==1?'s':''}`;
+  document.getElementById('wine-count-badge').textContent=`🍷 ${wineItems.length} Wine Selection${wineItems.length!==1?'s':''}`;
+}
+
+function removeFood(i){foodItems.splice(i,1);renderFoodItems();updateBadges()}
+function removeWine(i){wineItems.splice(i,1);renderWineItems();updateBadges()}
+
+// ═══ MANUAL ITEM MODAL ═══
+function openAddModal(type){
+  currentModalType=type;
+  document.getElementById('modal-title').textContent=type==='food'?'Add Food Item':'Add Wine / Beverage';
+  document.getElementById('modal-food-fields').style.display=type==='food'?'block':'none';
+  document.getElementById('modal-wine-fields').style.display=type==='wine'?'block':'none';
+  document.getElementById('add-modal').classList.add('active');
+}
+function closeModal(){
+  document.getElementById('add-modal').classList.remove('active');
+  ['modal-food-name','modal-food-details','modal-food-options','modal-wine-name'].forEach(id=>document.getElementById(id).value='');
+}
+function saveModalItem(){
+  if(currentModalType==='food'){
+    const name=document.getElementById('modal-food-name').value.trim();
+    const det=document.getElementById('modal-food-details').value.trim();
+    const opts=document.getElementById('modal-food-options').value.trim();
+    if(!name){showToast('Please enter item name','error');return}
+    foodItems.push({title:name,details:det?det.split(',').map(d=>d.trim()).filter(d=>d):[],options:opts});
+    renderFoodItems();
+  }else{
+    const name=document.getElementById('modal-wine-name').value.trim();
+    const cat=document.getElementById('modal-wine-category').value;
+    if(!name){showToast('Please enter wine name','error');return}
+    wineItems.push({name,category:cat});
+    renderWineItems();
+  }
+  updateBadges();closeModal();showToast('Item added ✓','success');
+}
+document.getElementById('add-modal').addEventListener('click',e=>{if(e.target===document.getElementById('add-modal'))closeModal()});
+
+// ═══ GENERATE BEAUTIFUL A4 PRINT LAYOUT ═══
+function generatePrintView(){
+  if(!foodItems.length&&!wineItems.length){showToast('Add some items first!','error');return}
+
+  const route=document.getElementById('flight-route').value||'Flight Menu';
+  const cls=document.getElementById('flight-class').value;
+  const svc=document.getElementById('flight-service').value;
+  const fno=document.getElementById('flight-number').value;
+  const fdt=document.getElementById('flight-date').value;
+  const fmtDate=fdt?new Date(fdt).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'}):new Date().toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+
+  let foodHTML='';
+  if(foodItems.length){
+    foodHTML=`
+      <div class="print-section-title"><span class="section-icon">🍽</span><h2>For Your Selection</h2><div class="section-line"></div></div>
+      <div class="food-grid">
+        ${foodItems.map((item,idx)=>`
+          <div class="food-card${foodItems.length%2!==0&&idx===foodItems.length-1?' full-width':''}">
+            <div class="food-number">${String(idx+1).padStart(2,'0')}</div>
+            <div class="food-title">${escapeHtml(item.title)}</div>
+            ${item.details&&item.details.length?`<div class="food-details">${item.details.map(d=>`<span class="food-detail-chip">${escapeHtml(d)}</span>`).join('')}</div>`:''}
+            ${item.options?`<div class="food-options"><span class="opt-label">⚙ Options</span><span class="opt-value">${escapeHtml(item.options)}</span></div>`:''}
+          </div>
+        `).join('')}
+      </div>`;
+  }
+
+  let wineHTML='';
+  const cats={};
+  wineItems.forEach(w=>{if(!cats[w.category])cats[w.category]=[];cats[w.category].push(w)});
+  if(Object.keys(cats).length){
+    const order=['Champagne','White','Red','Spirit'];
+    const dotMap={Champagne:'champagne-dot',White:'white-dot',Red:'red-dot',Spirit:'spirit-dot'};
+    const labelMap={Champagne:'Champagne',White:'White Wines',Red:'Red Wines',Spirit:'Spirits & Others'};
+    let cHTML='';
+    order.forEach(cat=>{
+      if(cats[cat]){
+        cHTML+=`<div class="wine-category">
+          <div class="wine-category-header"><div class="wine-dot ${dotMap[cat]}"></div><h3>${labelMap[cat]}</h3></div>
+          <div class="wine-list">${cats[cat].map(w=>`<div class="wine-item"><div class="wine-bullet"></div><div class="wine-name">${escapeHtml(w.name)}</div></div>`).join('')}</div>
+        </div>`;
+      }
+    });
+    wineHTML=`<div class="print-section-title"><span class="section-icon">🍷</span><h2>Wine & Beverage Selection</h2><div class="section-line"></div></div><div class="wine-section">${cHTML}</div>`;
+  }
+
+  document.getElementById('a4-page').innerHTML=`
+    <div class="corner-decor top-left"></div><div class="corner-decor top-right"></div>
+    <div class="corner-decor bottom-left"></div><div class="corner-decor bottom-right"></div>
+    <div class="a4-inner">
+      <div class="print-header">
+        <div class="airline-badge"><span class="dot"></span><span>${escapeHtml(svc)}</span><span class="dot"></span></div>
+        <h1>${escapeHtml(route)}</h1>
+        <div class="flight-route">${escapeHtml(cls)}</div>
+        <div class="flight-meta">
+          ${fno?`<span>✈ ${escapeHtml(fno)}</span>`:''}
+          <span>📅 ${fmtDate}</span>
+          <span>🍽 ${foodItems.length} items · 🍷 ${wineItems.length} wines</span>
+        </div>
+      </div>
+      ${foodHTML}${wineHTML}
+      <div class="print-footer">
+        <div class="footer-note">Crew Service Reference Sheet</div>
+        <div>Generated ${new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})} · Flight Menu Prep</div>
+      </div>
+    </div>`;
+
+  document.getElementById('app-input').style.display='none';
+  document.getElementById('app-print').style.display='block';
+  document.querySelector('.bottom-bar').style.display='none';
+  window.scrollTo(0,0);
+}
+
+function backToEdit(){
+  document.getElementById('app-input').style.display='block';
+  document.getElementById('app-print').style.display='none';
+  document.querySelector('.bottom-bar').style.display='flex';
+}
+
+function clearAll(){
+  if(!confirm('Clear all items and start fresh?'))return;
+  foodItems=[];wineItems=[];
+  renderFoodItems();renderWineItems();updateBadges();
+  showToast('All cleared','success');
+}
+
+// ═══ INIT ═══
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('flight-date').value=new Date().toISOString().split('T')[0];
+  
+  // Check for URL query parameter 'data'
+  const urlParams = new URLSearchParams(window.location.search);
+  const dataParam = urlParams.get('data');
+  if (dataParam) {
+    // Wipe sample demo items to load fresh custom AI data
+    foodItems = [];
+    wineItems = [];
+    
+    document.getElementById('menu-paste-box').value = decodeURIComponent(dataParam);
+    runSmartTextFill();
+    generatePrintView(); // Go straight to print sheet view!
+  } else {
+    renderFoodItems();
+    renderWineItems();
+    updateBadges();
+  }
+});
+</script>
+</body>
+</html>
